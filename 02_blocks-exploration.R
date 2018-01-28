@@ -1,5 +1,6 @@
 library(tidyverse)
 library(data.tree)
+library(broom)
 
 blocks <- read_delim("data/page-blocks.data")
 
@@ -29,6 +30,14 @@ str(new_df2$height)
 colMeans(new_df2[1:10])
 summary(new_df2$class)
 
+x <- map(blocks_split, str_split("\\s+"))
+x <- walk(blocks_split, str_split("\\s+"))
+problems(x)
+
+
+# browseVignettes(package = "broom")
+# tidy(blocks_split)
+# glance(blocks_split[1])
 
 blocks_split %>%
   unlist() %>% 
@@ -50,6 +59,19 @@ parse_integer(blocks_split[1])
 blocks %>% 
   str_split("\\s+") %>% 
   tibble() %>% str()
+library(skimr)
+skim(chickwts)
+skim(blocks)
+
+
+
+blocks_split[1] %>% str()
+x <- parse_integer(c("1x", "blah", "3"))
+problems(x)
+
+?unnest
+unnest(blocks_split)
+skimr
 
 new_df <- as_tibble(matrix(nrow = length(blocks),
                            ncol = 11))
