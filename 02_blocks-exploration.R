@@ -2,16 +2,34 @@ library(tidyverse)
 library(data.tree)
 library(broom)
 
-blocks <- read_delim("data/page-blocks.data")
-
-
-f <- file("https://archive.ics.uci.edu/ml/machine-learning-databases/page-blocks/page-blocks.data.Z",
-          open = "r")
-blocks <- read.table(f)
+# blocks <- read_delim("data/page-blocks.data")
+# 
+# 
+# f <- file("https://archive.ics.uci.edu/ml/machine-learning-databases/page-blocks/page-blocks.data.Z",
+#           open = "r")
+# blocks <- read.table(f)
 
 blocks <- read_csv("data/page-blocks.data", col_names = FALSE)[[1]]
+blocks_df <- read_csv("data/page-blocks.data", col_names = "string")
 # FromListSimple(blocks)
+blocks_df
+blocks_df %>% map("string", ~str_split("\\s+"))
+str_split(blocks_df$string, "\\s+")
+map(blocks_df$string, ~ str_split(.x, "\\s+"))
+map_chr(blocks_df$string, ~ str_split(.x, "\\s+"))
 
+# This is getting there with map() ----------------------------------------
+
+
+str(blocks)
+str_split(blocks[1], "\\s+")
+test <- map(blocks, ~ str_split(.x, "\\s+")) 
+test[1]
+
+df <- tibble()
+map(blocks, ~ str_split(.x, "\\s+")) %>% map(bind_rows(df, .x))
+
+str(blocks, 2)
 blocks_split <- str_split(blocks, "\\s+")
 new_df2 <- tibble(height = sapply(blocks_split, function(x) {as.integer(x[1])}),
                   length = sapply(blocks_split, function(x) {as.integer(x[2])}),
